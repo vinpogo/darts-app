@@ -1,7 +1,6 @@
 import { Field } from "./types";
 
-const scoringTable: Record<Field, number> = {
-  0: 0,
+const scoringTable: Record<Exclude<Field, "0">, number> = {
   1: 1,
   D1: 2,
   T1: 3,
@@ -87,7 +86,6 @@ function rest(score: number, darts: Field[]): number {
 
 function possibilities(score: number): Field[][] {
   const afterFirstDart = initialPossiblities(score);
-  console.log({ afterFirstDart });
   const afterSecondDart = afterFirstDart
     .flatMap((path) => fields.map((field) => [...path, field]))
     .filter((path) => {
@@ -97,7 +95,6 @@ function possibilities(score: number): Field[][] {
       if (r === 0 && !path.at(-1)?.startsWith("D")) return false;
       return true;
     });
-  console.log({ afterSecondDart });
   const afterThirdDart = afterSecondDart
     .flatMap((path) => fields.map((field) => [...path, field]))
     .filter((path) => {
@@ -107,7 +104,13 @@ function possibilities(score: number): Field[][] {
       if (r === 0 && !path.at(-1)?.startsWith("D")) return false;
       return true;
     });
-  console.log({ afterThirdDart });
+  // .map((path) =>
+  //   path.reduceRight<Field[]>((res, field) => {
+  //     if (field === "0" && res.length !== 0) res.unshift(field);
+  //     if (field !== "0") res.unshift(field);
+  //     return res;
+  //   }, [])
+  // );
   return afterThirdDart;
 }
 
@@ -118,4 +121,4 @@ function getAllPossibilities() {
   }, {});
 }
 
-console.log(possibilities(32));
+console.log(JSON.stringify(getAllPossibilities()));
