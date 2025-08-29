@@ -52,14 +52,18 @@ const multiplierOptions = ref([
 ])
 
 function inputNumber(number: string) {
-  emit('input', (multiplier.value + number) as Field)
+  if (['0', 'Bull', 'DBull'].includes(number)) {
+    emit('input', number as Field)
+  } else {
+    emit('input', (multiplier.value + number) as Field)
+  }
 }
 
 function changeMultiplier({ value }: SelectButtonChangeEvent) {
   multiplier.value = value
 
   let temp = props.value
-  if (!isBull(temp)) {
+  if (!isBull(temp) && temp !== '0') {
     if (temp.startsWith('D') || temp.startsWith('T')) {
       temp = temp.slice(1) as Field
     }
