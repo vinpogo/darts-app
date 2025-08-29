@@ -8,6 +8,6 @@ export default {
     return apiClient.post('/', data)
   },
   getSuggestion(score: number): Promise<Suggestion> {
-    return apiClient.get('/', { headers: {score: score} })
+    return apiClient.get('/', { params: {score: score} })
   }
 }
