@@ -1,36 +1,49 @@
 <script setup lang="ts">
+import { ref, computed } from 'vue';
+import DartService, { Round } from './services/DartService';
+import Fieldset from 'primevue/fieldset';
 import Button from 'primevue/button'
-import Fieldset from 'primevue/fieldset'
-import { computed } from 'vue'
 
-const suggestion1 = computed(() => {
-  return 123
-})
-const suggestion2 = computed(() => {
-  return 123
-})
-const suggestion3 = computed(() => {
-  return 123
-})
+const games = ref([]);
 
+const createRound = async () => {
+  try {
+    const rounds: Round[] = [
+      {aimed: 5, hit: 5},
+      {aimed: 5, hit: 5},
+      {aimed: 5, hit: 5},
+    ];
+    const response = await DartService.createRound(rounds);
+    games.value.push(response.data);
+  } catch (error) {
+    console.error('Error creating game:', error);
+  }
+};
+
+const darts = computed(() => {
+  return [
+    {
+      id: 1,
+    },
+    {
+      id: 2
+    },
+    {
+      id: 3
+    },
+  ]
+})
 </script>
 
 <template>
-  <h1 class="text-3xl font-bold underline">You did it!</h1>
   <div>
-
-    <Fieldset legend="Dart 1">
-      {{suggestion1}}
+    <h1 class="text-3xl font-bold underline">Darts App</h1>
+    <Fieldset v-for="dart in darts" :key="dart.id" :legend="`Dart ${dart.id}`">
+      <pre>{{ dart.id }}</pre>
     </Fieldset>
-    <Fieldset legend="Dart 2">
-      {{suggestion2}}
-    </Fieldset>
-    <Fieldset legend="Dart 3">
-      {{suggestion3}}
-    </Fieldset>
+    <Button label="play round" @click="createRound" />
   </div>
   
-  <Button label="qwe" />
 </template>
 
 <style scoped>
