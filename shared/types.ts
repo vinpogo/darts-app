@@ -64,11 +64,13 @@ export type Field =
   | "DBull";
 
 export type FieldEntry = Record<Field, number>;
-export type Aims = Record<Exclude<Field, "0">, FieldEntry> & { darts: number };
+export type ScoringAverage = Record<Exclude<Field, "0">, FieldEntry> & {
+  shots: number;
+};
 
 const fromDb = {
   5: {
-    darts: 925,
+    shots: 925,
     5: 0.9,
     D5: 0.02,
     T5: 0.001,
@@ -77,7 +79,7 @@ const fromDb = {
 };
 
 const upsert = {
-  darts: 15,
+  shots: 15,
   5: 0.8,
   0: 0.2,
 };
