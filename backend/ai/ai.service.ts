@@ -21,6 +21,7 @@ const client = new OpenAI({
 const CheckoutSchema = z.object({
   checkout: z.array(FieldSchema),
   explaination: z.string()
+  simple_explaination: z.string()
 });
 
 interface CheckoutTargetsProp {

@@ -30,6 +30,9 @@ A list of all possible checkout combinations for the player's current score.
 Return the best next shot combination to finish the match or just get closer to the finish.
 Prioritize higher percentage shots when multiple finish options exist.
 
+- explaination: The full explaination of why this is the suggested shot.
+- short_explaination: A short version of the explaination with 1-2 sentences in simple language.
+
 ## Output Format
 JSON string like:
 [T19, T19, D20]
