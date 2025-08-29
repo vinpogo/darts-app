@@ -64,7 +64,12 @@ export type Field =
   | "DBull";
 
 export type FieldEntry = Partial<Record<Field, number>>;
-export type Aims = Partial<Record<Exclude<Field, "0">, FieldEntry & { shots: number }>>;
+export type ScoringAverage = Record<
+  Exclude<Field, "0">,
+  FieldEntry & {
+    shots: number;
+  }
+>;
 
 const fromDb = {
   5: {
@@ -73,6 +78,7 @@ const fromDb = {
     D5: 0.02,
     T5: 0.001,
     0: 0.05,
+    13: 0.005,
   },
 };
 
@@ -82,4 +88,4 @@ const upsert = {
   0: 0.2,
 };
 
-export type PossibleCheckouts = Field[][]
+export type PossibleCheckouts = Field[][];
