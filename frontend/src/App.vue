@@ -7,7 +7,13 @@ import { Field, Suggestion } from '../../shared/types'
 
 function handleSubmit() {
   try {
-    DartService.submit(suggestion.value.score).then(() => {
+    const toSubmit = suggestion.value.score.map((s, i) => {
+      return {
+        aim: initialScore.value[i],
+        hit: s
+      }
+    }, {})
+    DartService.submit(toSubmit).then(() => {
 
       suggestion.value.score.forEach((s) => {
         totalScore.value -= convertScore(s)
@@ -15,6 +21,7 @@ function handleSubmit() {
       DartService.getSuggestion(totalScore.value).then((data) => {
         // TODO: see what data is and apply properly to the suggestion
         suggestion.value = data
+        initialScore.value = data.score
       })
     })
   } catch {}
@@ -43,6 +50,7 @@ function convertScore(score: Field) {
 }
 
 const totalScore = ref<number>(501)
+const initialScore = ref<Field[]>(['T20', 'T20', 'D20'])
 
 const suggestion = ref<Suggestion>({
   score: ['T20', 'T20', 'D20'],

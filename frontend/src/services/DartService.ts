@@ -1,10 +1,10 @@
 
 import apiClient from '../api'
 
-import { type Field, type Suggestion } from '../../../shared/types'
+import { type Suggestion } from '../../../shared/types'
 
 export default {
-  submit(data: Field[]) {
+  submit(data: any) {
     return apiClient.post('/', data)
   },
   getSuggestion(score: number): Promise<Suggestion> {
