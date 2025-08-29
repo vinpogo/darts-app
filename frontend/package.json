@@ -19,8 +19,10 @@
   },
   "dependencies": {
     "@primevue/themes": "^4.3.7",
+    "@tailwindcss/vite": "^4.1.12",
     "pnpm": "^10.15.0",
     "primevue": "^4.3.7",
+    "tailwindcss": "^4.1.12",
     "vue": "^3.5.18"
   },
   "devDependencies": {
