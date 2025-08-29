@@ -1,10 +1,13 @@
 
 import apiClient from '../api'
+
+import { type Field, type Suggestion } from '../../../shared/types'
+
 export default {
-  getRound(startingScore: number) {
-    return apiClient.get(`/round/${startingScore}`)
-  },
-  createRound(data: []) {
+  submit(data: Field[]) {
     return apiClient.post('/', data)
   },
+  getSuggestion(score: number): Promise<Suggestion> {
+    return apiClient.get('/', { headers: {score: score} })
+  }
 }

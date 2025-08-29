@@ -7,9 +7,18 @@ import { Field, Suggestion } from '../../shared/types'
 
 function handleSubmit() {
   try {
-    DartService.createRound([])
+    DartService.submit(suggestion.value.score).then(() => {
+      // TODO: remove 20 to proper number conversion
+      totalScore.value = totalScore.value - 20 //suggestion.value.score
+      DartService.getSuggestion(totalScore.value).then((data) => {
+        // TODO: see what data is and apply properly to the suggestion
+        suggestion.value = data
+      })
+    })
   } catch {}
 }
+
+const totalScore = ref<number>(501)
 
 const suggestion = ref<Suggestion>({
   score: ['T20', 'T20', 'D20'],
@@ -30,7 +39,7 @@ function updateResult(field: Field) {
   <div>
     {{ selectedSuggestion }}
     <Score
-      :total-score="501"
+      :total-score="totalScore"
       :suggestion="suggestion"
       :selected-suggestion="selectedSuggestion"
       @select-suggestion="selectSuggestion"
