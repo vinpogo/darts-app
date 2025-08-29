@@ -10,7 +10,7 @@ const config = {
   apiKey: Bun.env.AI_API_KEY,
   baseUrl: Bun.env.AI_BASE_URL,
 };
-const model: ChatModel = "gpt-5-mini";
+const model: ChatModel = "gpt-4.1";
 // const model: ChatModel = "gpt-4o-2024-08-06";
 
 const client = new OpenAI({
