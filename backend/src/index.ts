@@ -23,7 +23,16 @@ app.post("/", async (c) => {
 });
 
 // CORS should be called before the route
-app.use("/*", cors());
+app.use(
+  "*",
+  cors({
+    origin: (origin) => {
+      return origin.endsWith(".localhost:5173")
+        ? origin
+        : "http://localhost:5173";
+    },
+  })
+);
 
 export default {
   port: 3521,
