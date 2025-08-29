@@ -19,6 +19,7 @@ app.post("/processor", async (c) => {
 export default { 
   port: 3521, 
   fetch: app.fetch, 
+  idleTimeout: 30,
 } 
 
 db.close(false);

@@ -4,7 +4,7 @@ import { Aims, Field } from "../../shared/types";
 import { getCheckoutTargets } from "../ai/ai.service";
 import { db } from "./db";
 
-export function serveAI(c: Context<BlankEnv, "/", BlankInput>) {
+export async function serveAI(c: Context<BlankEnv, "/", BlankInput>) {
   const score = Number(c.req.query("score"));
   if (!score) {
     return c.json({
@@ -22,7 +22,7 @@ export function serveAI(c: Context<BlankEnv, "/", BlankInput>) {
     ["D19", "T19", "19"],
   ];
 
-  getCheckoutTargets({ score, possibilities, aims });
+  const checkoutTargets = await getCheckoutTargets({ score, possibilities, aims });
 
-  return c.json({ possibilities });
+  return c.json({ checkoutTargets });
 }
