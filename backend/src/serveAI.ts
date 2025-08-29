@@ -1,6 +1,6 @@
 import { Context } from "hono";
 import { BlankEnv, BlankInput } from "hono/types";
-import { Aims, Field } from "../../shared/types";
+import { ScoringAverage, Field } from "../../shared/types";
 import { getCheckoutTargets } from "../ai/ai.service";
 import { db } from "./db";
 
@@ -12,8 +12,7 @@ export async function serveAI(c: Context<BlankEnv, "/", BlankInput>) {
     });
   }
 
-  //    const query = db.query<Aims>('SELECT * FROM aims');
-  const aims: Aims = {
+  const aims: ScoringAverage = {
     20: { 20: 100, shots: 100 },
     10: { shots: 40, 5: 20, 10: 10, 1: 10 },
   }; // query.get()

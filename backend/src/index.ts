@@ -4,7 +4,11 @@ import { serveAI } from './serveAI'
 import { db } from './db'
 const app = new Hono();
 
-
+const query = db.query(`CREATE TABLE IF NOT EXISTS aims (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  json TEXT NOT NULL
+);`);
+query.run();
 
 app.get('/', serveAI)
 

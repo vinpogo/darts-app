@@ -64,12 +64,12 @@ export type Field =
   | "DBull";
 
 export type FieldEntry = Partial<Record<Field, number>>;
-export type ScoringAverage = Record<
+export type ScoringAverage = Partial<Record<
   Exclude<Field, "0">,
   FieldEntry & {
     shots: number;
   }
->;
+>>;
 
 const fromDb = {
   5: {
