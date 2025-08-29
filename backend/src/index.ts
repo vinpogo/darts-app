@@ -1,10 +1,9 @@
 import { Hono } from 'hono'
+import { serveAI } from './serveAI'
 
 const app = new Hono()
 
-app.get('/', (c) => {
-  return c.text('Hello Hono!')
-})
+app.get('/', serveAI)
 
 export default { 
   port: 3521, 
