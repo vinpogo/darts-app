@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { Field } from '../../../shared/types'
+import { Suggestion } from '../../../shared/types'
 
-type Suggestion = {
-  score: Field[]
-  longExplanation: string
-}
 const props = defineProps<{
   totalScore: number
   suggestion: Suggestion
+  selectedSuggestion: number
+}>()
+
+const emit = defineEmits<{
+  (e: 'selectSuggestion', index: number): void
 }>()
 </script>
 
@@ -15,8 +16,13 @@ const props = defineProps<{
   <div class="flex flex-col justify-center items-center">
     <h1 class="text-9xl font-bold">{{ totalScore }}</h1>
     <div class="flex items-center gap-5">
-      <template v-for="sg in suggestion.score" :key="sg">
-        <span class="text-2xl">{{ sg }}</span>
+      <template v-for="(sg, index) in suggestion.score" :key="index">
+        <span
+          class="text-2xl cursor-pointer"
+          :class="{ 'text-red-500': selectedSuggestion === index }"
+          @click="emit('selectSuggestion', index)"
+          >{{ sg }}</span
+        >
       </template>
       <span v-tooltip="suggestion.longExplanation" class="pi pi-question-circle"></span>
     </div>

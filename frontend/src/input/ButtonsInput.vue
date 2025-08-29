@@ -1,9 +1,5 @@
 <template>
   <div class="p-5">
-    <div class="flex flex-row gap-5 p-5">
-      <div class="">Result: {{ result }}</div>
-    </div>
-
     <div class="grid grid-rows-5 grid-cols-5 gap-5">
       <template v-for="number in numbers" :key="number">
         <Button :label="number" @click="inputNumber(number)" />
@@ -27,7 +23,6 @@
         </div>
       </div>
       <div class="grid grid-cols-2 gap-5">
-        <Button label="Undo" @click="undo" />
         <Button label="Submit" @click="submit" />
       </div>
     </div>
@@ -39,8 +34,12 @@ import { SelectButton, Button, SelectButtonChangeEvent } from 'primevue'
 import { ref } from 'vue'
 import { Field } from '../../../shared/types'
 
+const props = defineProps<{
+  value: Field
+}>()
+
 const emit = defineEmits<{
-  (e: 'input', field: Field): void
+  (e: 'value', field: Field): void
   (e: 'submit'): void
 }>()
 
@@ -52,39 +51,25 @@ const multiplierOptions = ref([
   { label: 'T', value: 'T' },
 ])
 
-const result = ref<Field[]>([])
-
 function inputNumber(number: string) {
-  if (result.value.length >= 3) {
-    return
-  }
-  multiplier.value = ''
-  result.value.push((multiplier.value + number) as Field)
+  emit('input', (multiplier.value + number) as Field)
 }
 
 function changeMultiplier({ value }: SelectButtonChangeEvent) {
-  console.log(value)
   multiplier.value = value
 
-  const lastNumber = result.value[result.value.length - 1]
-  console.log(lastNumber)
-  if (lastNumber && !isBull(lastNumber)) {
-    let temp = lastNumber as string
-    if (lastNumber.startsWith('D') || lastNumber.startsWith('T')) {
-      temp = lastNumber.slice(1)
+  let temp = props.value
+  if (!isBull(temp)) {
+    if (temp.startsWith('D') || temp.startsWith('T')) {
+      temp = temp.slice(1) as Field
     }
-    result.value[result.value.length - 1] = (value + temp) as Field
+    emit('input', (value + temp) as Field)
   }
 }
 
 function isBull(field: Field) {
   return field === 'Bull' || field === 'DBull'
 }
-
-function undo() {
-  result.value.pop()
-}
-
 function submit() {
   emit('submit')
   // TODO: implement submission logic
