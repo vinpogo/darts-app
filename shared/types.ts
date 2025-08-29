@@ -64,7 +64,7 @@ export type Field =
   | "DBull";
 
 export type FieldEntry = Record<Field, number>;
-export type Aims = Record<Exclude<Field, "0">, FieldEntry> & { darts: number };
+export type Aims = Record<Exclude<Field, "0">, FieldEntry & { darts: number }>;
 
 const fromDb = {
   5: {
