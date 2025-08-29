@@ -36,5 +36,5 @@ app.post("/", async (c) => {
 export default {
   port: 3521,
   fetch: app.fetch,
-  idleTimeout: 30,
+  idleTimeout: 60,
 };

@@ -18,11 +18,15 @@ function handleSubmit() {
       suggestion.value.score.forEach((s) => {
         totalScore.value -= convertScore(s)
       })
-      DartService.getSuggestion(totalScore.value).then((data) => {
-        // TODO: see what data is and apply properly to the suggestion
-        suggestion.value = data
-        initialScore.value = data.score
-      })
+      if (totalScore.value <= 170) {
+
+        DartService.getSuggestion(totalScore.value).then((data) => {
+          console.log(data)
+  
+          suggestion.value.score = data.data.checkout
+          initialScore.value = data.data.checkout
+        })
+      }
     })
   } catch {}
 }
