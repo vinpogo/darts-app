@@ -82,4 +82,4 @@ const upsert = {
   0: 0.2,
 };
 
-export type PossibleCheckouts = Record<number, Field[][]>;
+export type PossibleCheckouts = Field[][]
