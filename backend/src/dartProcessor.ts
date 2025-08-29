@@ -28,8 +28,8 @@ function calculateScoringAverage(
   return {
     ...scoringAverage,
     [shot.aim]: {
-      ...scoringAverage[shot.aim],
-      shots: scoringAverage[shot.aim]?.shots ?? 0 + 1,
+      ...scoringAverage?.[shot.aim],
+      shots: scoringAverage?.[shot.aim]?.shots ?? 0 + 1,
       [shot.hit]: scoringAverage?.[shot.aim]?.[shot.hit] ?? 0 + 1,
     },
   };

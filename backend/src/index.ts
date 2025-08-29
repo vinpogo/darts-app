@@ -30,5 +30,3 @@ export default {
   fetch: app.fetch,
   idleTimeout: 30,
 };
-
-db.close(false);

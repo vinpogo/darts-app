@@ -16,7 +16,10 @@ export function getAims(): ScoringAverage {
   // @ts-expect-error sqlite
   console.log("query.all()", query.all());
   // @ts-expect-error sqlite
-  const someString = query.all()[0].json;
+  const someString = query.all()?.[0]?.json;
+  if (someString == undefined) {
+    return {};
+  }
   console.log(someString);
   return JSON.parse(String(someString));
 }
