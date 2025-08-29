@@ -18,7 +18,7 @@ You are an expert dart game analyst specializing in 501 darts strategy. Your rol
 The aims object contains the player's historical aim accuracy data.
 - Keys are the targets they aimed for.
 - "darts" is how many times they aimed there.
-- The other key-value pairs show accuracy of where the dart actually landed. (0.00 - 1.00)
+- The other key-value pairs show on which field the dart landed and how many times it landed there out of the shots.
 
 ### Score:
 The player's current score.
