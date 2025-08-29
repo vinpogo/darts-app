@@ -21,7 +21,6 @@ export async function serveAI(c: Context<BlankEnv, "/", BlankInput>) {
     ["D19", "T19", "19"],
   ];
 
-  const checkoutTargets = await getCheckoutTargets({ score, possibilities, aims });
-
-  return c.json({ checkoutTargets });
+  const {checkout, explanation, simple_explanation } = await getCheckoutTargets({ score, possibilities, aims });
+  return c.json({ checkout, explanation, simple_explanation });
 }

@@ -21,7 +21,7 @@ const client = new OpenAI({
 const CheckoutSchema = z.object({
   checkout: z.array(FieldSchema),
   explaination: z.string(),
-  simple_explaination: z.string()
+  simple_explaination: z.string(),
 });
 
 interface CheckoutTargetsProp {
@@ -29,9 +29,7 @@ interface CheckoutTargetsProp {
   possibilities: PossibleCheckouts;
   score: number;
 }
-export async function getCheckoutTargets(
-  args: CheckoutTargetsProp,
-) {
+export async function getCheckoutTargets(args: CheckoutTargetsProp): any {
   const prompt = `
 The player has a score of ${args.score}.
 
@@ -59,5 +57,5 @@ Return it in JSON strictly matching the schema.
     },
   });
 
-  return response.output_parsed 
+  return response.output_parsed;
 }

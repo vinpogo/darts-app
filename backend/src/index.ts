@@ -6,18 +6,23 @@ import { cors } from "hono/cors";
 
 const app = new Hono();
 
-// CORS should be called before the route
-app.use(
-  "*",
-  cors()
-);
-
 const query = db.query(`CREATE TABLE IF NOT EXISTS aims (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   json TEXT NOT NULL
 );`);
 query.run();
 
+// CORS should be called before the route
+app.use(
+  "*",
+  cors({
+    origin: (origin) => {
+      return origin.endsWith(".localhost:5173")
+        ? origin
+        : "http://localhost:5173";
+    },
+  })
+);
 app.get("/", serveAI);
 
 app.post("/", async (c) => {
@@ -27,7 +32,6 @@ app.post("/", async (c) => {
     "Content-Type": "text/plain",
   });
 });
-
 
 export default {
   port: 3521,
