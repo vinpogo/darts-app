@@ -63,10 +63,8 @@ export type Field =
   | "Bull"
   | "DBull";
 
-export type FieldEntry = Record<Field, number>;
-export type ScoringAverage = Record<Exclude<Field, "0">, FieldEntry> & {
-  shots: number;
-};
+export type FieldEntry = Partial<Record<Field, number>>;
+export type Aims = Partial<Record<Exclude<Field, "0">, FieldEntry & { shots: number }>>;
 
 const fromDb = {
   5: {
