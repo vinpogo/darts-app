@@ -1,25 +1,30 @@
 <template>
-  <div>
-    <div>
+  <div class="p-5">
+    <div class="grid grid-rows-5 grid-cols-5 gap-5">
       <template v-for="number in numbers" :key="number">
         <Button :label="number" @click="inputNumber(number)" />
       </template>
     </div>
-    <SelectButton
-      :model-value="multiplier"
-      option-label="label"
-      option-value="value"
-      @change="changeMultiplier"
-      name="selection"
-      :options="multiplierOptions"
-    />
-    <div>
-      <Button label="Bull" @click="inputNumber('Bull')" />
-      <Button label="DBull" @click="inputNumber('DBull')" />
-    </div>
-    <div>
-      <Button label="Undo" @click="result.pop()" />
-      <Button label="Submit" @click="submit" />
+    
+    <div class="p-5 grid gap-5">
+      <div class="flex gap-5">
+        <SelectButton
+          :model-value="multiplier"
+          option-label="label"
+          option-value="value"
+          @change="changeMultiplier"
+          name="selection"
+          :options="multiplierOptions"
+        />
+        <div class="grid ml-auto grid-cols-2 gap-5">
+          <Button label="Bull" @click="inputNumber('Bull')" />
+          <Button label="DBull" @click="inputNumber('DBull')" />
+        </div>
+      </div>
+      <div  class="grid grid-cols-2 gap-5">
+        <Button label="Undo" @click="result.pop()" />
+        <Button label="Submit" @click="submit" />
+      </div>
     </div>
   </div>
 </template>

@@ -46,6 +46,6 @@ const darts = computed(() => {
   </div>
 </template>
 
-<style scoped>
+<style>
 @import 'tailwindcss';
 </style>
