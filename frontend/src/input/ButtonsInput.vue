@@ -1,10 +1,7 @@
 <template>
   <div class="p-5">
     <div class="flex flex-row gap-5 p-5">
-
-    <div class="">
-      Result: {{ result }}
-    </div>
+      <div class="">Result: {{ result }}</div>
     </div>
 
     <div class="grid grid-rows-5 grid-cols-5 gap-5">
@@ -12,7 +9,7 @@
         <Button :label="number" @click="inputNumber(number)" />
       </template>
     </div>
-    
+
     <div class="p-5 grid gap-5">
       <div class="flex gap-5">
         <SelectButton
@@ -29,7 +26,7 @@
           <Button label="DBull" @click="inputNumber('DBull')" />
         </div>
       </div>
-      <div  class="grid grid-cols-2 gap-5">
+      <div class="grid grid-cols-2 gap-5">
         <Button label="Undo" @click="undo" />
         <Button label="Submit" @click="submit" />
       </div>
@@ -38,9 +35,14 @@
 </template>
 
 <script setup lang="ts">
-import { SelectButton, Button, SelectButtonChangeEvent, ToggleSwitch } from 'primevue'
-import { computed, ref } from 'vue'
+import { SelectButton, Button, SelectButtonChangeEvent } from 'primevue'
+import { ref } from 'vue'
 import { Field } from '../../../shared/types'
+
+const emit = defineEmits<{
+  (e: 'input', field: Field): void
+  (e: 'submit'): void
+}>()
 
 const numbers = ref(Array.from({ length: 20 }, (_, i) => String(i + 1)))
 const multiplier = ref('')
@@ -49,7 +51,6 @@ const multiplierOptions = ref([
   { label: 'D', value: 'D' },
   { label: 'T', value: 'T' },
 ])
-
 
 const result = ref<Field[]>([])
 
