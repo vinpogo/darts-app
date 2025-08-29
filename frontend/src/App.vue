@@ -8,14 +8,38 @@ import { Field, Suggestion } from '../../shared/types'
 function handleSubmit() {
   try {
     DartService.submit(suggestion.value.score).then(() => {
-      // TODO: remove 20 to proper number conversion
-      totalScore.value = totalScore.value - 20 //suggestion.value.score
+
+      suggestion.value.score.forEach((s) => {
+        totalScore.value -= convertScore(s)
+      })
       DartService.getSuggestion(totalScore.value).then((data) => {
         // TODO: see what data is and apply properly to the suggestion
         suggestion.value = data
       })
     })
   } catch {}
+}
+
+function convertScore(score: Field) {
+  
+  let multiplier = 1
+  let actualValue = 0
+
+  if (score.startsWith('T')) {
+    multiplier = 3
+    actualValue = Number(score.slice(1, score.length))
+  } else if (score.startsWith('D')) {
+    multiplier = 2
+    actualValue = Number(score.slice(1, score.length))
+  } else if (score === 'Bull') {
+    actualValue = 25
+  } else if (score === 'DBull') {
+    actualValue = 50
+  } else {
+    actualValue = Number(score)
+  }
+  return actualValue * multiplier
+
 }
 
 const totalScore = ref<number>(501)
