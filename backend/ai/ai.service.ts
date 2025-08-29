@@ -4,6 +4,7 @@ import type { ChatModel } from "openai/resources";
 import z from "zod";
 import { FieldSchema } from "./schema";
 import { zodTextFormat } from "openai/helpers/zod";
+import { systemPrompt } from "./system.prompt";
 
 const config = {
   apiKey: Bun.env.AI_API_KEY,
@@ -19,6 +20,7 @@ const client = new OpenAI({
 
 const CheckoutSchema = z.object({
   checkout: z.array(FieldSchema),
+  explaination: z.string()
 });
 
 interface CheckoutTargetsProp {
@@ -28,24 +30,16 @@ interface CheckoutTargetsProp {
 }
 export async function getCheckoutTargets(
   args: CheckoutTargetsProp,
-): Promise<Field[]> {
-  const systemPrompt = `You are a darts assistant`;
+) {
   const prompt = `
 The player has a score of ${args.score}.
 
+# Aims
 Their aim history (accuracy data) looks like this:
 ${JSON.stringify(args.aims, null, 2)}
-- Keys are the targets they aimed for.
-- "darts" is how many times they aimed there.
-- The other key-value pairs show probabilities of where the dart actually landed.
 
 
-Task:
-Pick the SINGLE most likely checkout sequence for the player.
-Base your decision on both:
-1. The checkout being mathematically valid.
-2. The player's historical aim accuracy (i.e., prefer sequences that target fields they are more accurate at).
-The possible checkout combinations are:
+## Possible Checkouts
 ${Object.entries(args.possibilities)
   .map((c) => "- " + c[1].join(", "))
   .join("\n")}
@@ -64,5 +58,5 @@ Return it in JSON strictly matching the schema.
     },
   });
 
-  return response.output_parsed?.checkout ?? [];
+  return response.output_parsed 
 }
