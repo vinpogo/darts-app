@@ -1,6 +1,14 @@
 <script setup lang="ts">
 import Score from './score/Score.vue'
 import ButtonInput from './input/ButtonsInput.vue'
+import DartService from './services/DartService'
+function handleSubmit() {
+  try {
+    DartService.createRound([])
+  } catch {
+    
+  }
+}
 </script>
 
 <template>
@@ -12,7 +20,7 @@ import ButtonInput from './input/ButtonsInput.vue'
         longExplanation: 'fuck you',
       }"
     />
-    <ButtonInput />
+    <ButtonInput @submit="handleSubmit"/>
   </div>
 </template>
 

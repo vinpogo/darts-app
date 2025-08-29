@@ -86,6 +86,7 @@ function undo() {
 }
 
 function submit() {
+  emit('submit')
   // TODO: implement submission logic
 }
 </script>
