@@ -21,6 +21,7 @@ function handleSubmit() {
 
       DartService.getSuggestion(totalScore.value).then((data) => {
         suggestion.value.score = data.data.checkout
+        suggestion.value.longExplanation = data.data.explanation
         initialScore.value = data.data.checkout
       })
     })
@@ -54,7 +55,7 @@ const initialScore = ref<Field[]>(['T20', 'T20', 'D20'])
 
 const suggestion = ref<Suggestion>({
   score: ['T20', 'T20', 'D20'],
-  longExplanation: 'you`re just suck',
+  longExplanation: "you're just suck",
 })
 const selectedSuggestion = ref<number>(0)
 
