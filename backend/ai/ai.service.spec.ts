@@ -1,76 +1,87 @@
 import { describe, it, expect, mock, beforeEach } from "bun:test";
-import type { Aims, PossibleCheckouts } from "../../shared/types";
 import { getCheckoutTargets } from "./ai.service";
 
 describe("getCheckoutTargets", () => {
-  const possibilities: PossibleCheckouts = {
-    40: [["D20"]],
-    50: [["DBull"], ["10", "10", "D15"]],
-    170: [["T20", "T20", "DBull"]],
-  };
 
-  it("returns parsed checkout when model responds correctly", async () => {
+  it("setup shot 501", async () => {
     const result = await getCheckoutTargets({
-      aims: {
-        5: {
-          darts: 925,
-          5: 0.9,
-          D5: 0.02,
-          T5: 0.001,
-          0: 0.05,
-        },
-      },
-      possibilities: {
-        40: [["D20"]],
-        50: [["DBull"], ["10", "10", "D15"]],
-        170: [["T20", "T20", "DBull"]],
-      },
-      score: 50, //170,
+      aims: {},
+      possibilities: [],
+      score: 501,
     });
 
-    console.log({ result });
-    expect(result).toBeArray();
-    // expect(result).toBeArrayOfSize(3);
-    // expect(result).toEqual(["T20", "T20", "DBull"]);
+    expect(result.checkout).toEqual(["T20", "T20", "T20"]);
   });
 
-
-  it.only("test", async () => {
+  it("finishing 164", async () => {
     const result = await getCheckoutTargets({
-      aims: {
-        15: {
-          darts: 1000,
-          15: 0,
-          0: 1
-        },
-        5: {
-          darts: 1000,
-          5: 0.5,
-          13: 0.5
-        },
-        13: {
-          darts: 1000,
-          13: 0.51,
-        },
-        "D20": {
-          darts: 1000,
-          "D20": 0.2,
-          0: 0.8
-        },
-        "D16": {
-          darts: 1000,
-          "D16": 1,
-        }
-      },
-      possibilities: {
-        45: [["15", "D15"], ["5", "D20"], ["13", "D16"]],
-      },
-      score: 45,
+      aims: {},
+      possibilities: [['T20', 'T18', 'DBull'],['T19', 'T19', 'DBull']],
+      score: 164,
     });
 
-    console.log({ result });
-    expect(result).toBeArray();
-    // expect(result).toBeArrayOfSize(3);
-    // expect(result).toEqual(["T20", "T20", "DBull"]);
+    expect(result.checkout).toEqual(['T20', 'T18', 'DBull']);
+  });
+
+  it("finishing 164 with better T19 accuracy", async () => {
+    const result = await getCheckoutTargets({
+      aims: {
+        "T19": {
+          darts: 1000,
+          "T19": 900,
+          0: 100
+        },
+        "T20": {
+          darts: 1000,
+          "T20": 100,
+          "20": 900,
+        }
+      },
+      possibilities: [['T20', 'T18', 'DBull'],['T19', 'T19', 'DBull']],
+      score: 164,
+    });
+
+    expect(result.checkout).toEqual(['T19', 'T19', 'DBull']);
+  });
+
+  it("finishing 61", async () => {
+    const result = await getCheckoutTargets({
+      aims: {},
+      possibilities: [["T15", "D8"], ["T7", "D20"], ["T11", "D14"]],
+      score: 61,
+    });
+
+    expect(result.checkout).toEqual(["T15", "D8"]);
+  });
+
+  it.only("finishing 81 - bad D20 - ", async () => {
+    const result = await getCheckoutTargets({
+      aims: {
+        "D18": {
+          darts: 1000,
+          "D18": 600,
+          "D12": 400
+        },
+        "T15": {
+          darts: 1000,
+          "T15": 500,
+          0: 500
+        },
+        "D12": {
+          darts: 1000,
+          "D12": 200,
+          0: 800
+        },
+        "T19": {
+          darts: 1000,
+          "T19": 300,
+          0: 700
+        }
+      },
+      possibilities: [["T19", "D12"], ["T15", "D18"]],
+      score: 81,
+    });
+
+    expect(result.checkout).toEqual(["T15", "D18"]);
   });
 });
