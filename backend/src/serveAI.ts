@@ -21,6 +21,11 @@ export async function serveAI(c: Context<BlankEnv, "/", BlankInput>) {
     ["D19", "T19", "19"],
   ];
 
+  // AI is not available
+  if(!Bun.env.AI_API_KEY) {
+    return c.json({ checkout: possibilities[0], explaination: "", simple_explaination: "" });
+  }
+
   const result= await getCheckoutTargets({ score, possibilities, aims });
   const {checkout, explaination, simple_explaination } = result;
   return c.json({ checkout, explaination, simple_explaination });

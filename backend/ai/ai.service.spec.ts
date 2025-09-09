@@ -24,7 +24,7 @@ describe("getCheckoutTargets", () => {
   });
 
   it("finishing 164 with better T19 accuracy", async () => {
-    const result = await getCheckoutTargets({
+    const input = {
       aims: {
         "T19": {
           darts: 1000,
@@ -39,7 +39,8 @@ describe("getCheckoutTargets", () => {
       },
       possibilities: [['T20', 'T18', 'DBull'],['T19', 'T19', 'DBull']],
       score: 164,
-    });
+    }
+    const result = await getCheckoutTargets(input);
 
     expect(result.checkout).toEqual(['T19', 'T19', 'DBull']);
   });
@@ -54,7 +55,7 @@ describe("getCheckoutTargets", () => {
     expect(result.checkout).toEqual(["T15", "D8"]);
   });
 
-  it.only("finishing 81 - bad D20 - ", async () => {
+  it("finishing 81", async () => {
     const result = await getCheckoutTargets({
       aims: {
         "D18": {

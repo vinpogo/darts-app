@@ -1,14 +1,18 @@
 import OpenAI from "openai";
 import type { Aims, PossibleCheckouts, Field } from "../../shared/types";
-import type { ChatModel, Reasoning } from "openai/resources";
+import type { ChatModel, Model, Reasoning, ReasoningEffort } from "openai/resources";
 import z from "zod";
 import { FieldSchema } from "./schema";
 import { zodTextFormat } from "openai/helpers/zod";
 import { systemPrompt } from "./system.prompt";
 
-type ModelConfig = {
+type OpenAIModelConfig = {
   model: ChatModel
-  reasoning?: Reasoning
+  reasoning_effort?: ReasoningEffort
+}
+
+type OllamaModelConfig = {
+  model: string
 }
 
 const config = {
@@ -17,21 +21,16 @@ const config = {
 };
 
 /**
- * GPT 4.1-mini is very fast and can solve most of the problems.
- */
-const gpt4: ModelConfig = {
-  model: "gpt-4.1-mini"
-};
-
-/**
  * GPT 5-nano with low reasoning effort is reasonably fast,
  * and can solve all the problems.
  */
-const gpt5: ModelConfig = {
+const gpt5: OpenAIModelConfig = {
   model: "gpt-5-nano",
-  reasoning: {
-    effort: 'low',
-  },
+  reasoning_effort: "low"
+}
+
+const ollama: OllamaModelConfig = {
+  model: "qwen3:4b-instruct-2507-q4_K_M",
 }
 
 const client = new OpenAI({
@@ -39,10 +38,10 @@ const client = new OpenAI({
   baseURL: config.baseUrl,
 });
 
-const CheckoutSchema = z.object({
+export const CheckoutSchema = z.object({
   checkout: z.array(FieldSchema),
   explaination: z.string(),
-  simple_explaination: z.string(),
+  // simple_explaination: z.string(),
 });
 
 interface CheckoutTargetsProp {
@@ -51,8 +50,6 @@ interface CheckoutTargetsProp {
   score: number;
 }
 export async function getCheckoutTargets(args: CheckoutTargetsProp): any {
-  console.log("getCheckoutTargets", args);
-
   const prompt = `
 The player has a score of ${args.score}.
 
@@ -69,18 +66,32 @@ ${Object.entries(args.possibilities)
 Return it in JSON strictly matching the schema.
 `;
 
-  const response = await client.responses.parse({
-    ...gpt5,
-    input: [
+  const response = await client.chat.completions.create({
+    ...(config.baseUrl ? ollama : gpt5),
+    messages: [
       { role: "system", content: systemPrompt },
       { role: "user", content: prompt },
     ],
-    text: {
-      format: zodTextFormat(CheckoutSchema, "checkout"),
-    },
   });
 
-  console.log(response.usage)
+  const responseMessage = response.choices[0].message.content
+  if(!responseMessage) {
+    throw new Error("No response from AI");
+  }
 
-  return response.output_parsed;
+  const jsonText = responseMessage.slice(
+    responseMessage.indexOf("{"),
+    responseMessage.lastIndexOf("}") + 1,
+  );
+  if(!jsonText) {
+    throw new Error("No JSON from AI");
+  }
+
+  try {
+  const result = CheckoutSchema.parse(JSON.parse(jsonText));
+  return result;
+  } catch {
+    throw new Error("Invalid JSON from AI: " + jsonText);
+  }
+
 }
