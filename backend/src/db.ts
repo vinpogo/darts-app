@@ -12,14 +12,10 @@ export function getAims(): ScoringAverage {
   const query = db.query<ScoringAverage[], SQLQueryBindings>(
     "SELECT json FROM aims order by id DESC LIMIT 1;"
   );
-
   // @ts-expect-error sqlite
-  console.log("query.all()", query.all());
-  // @ts-expect-error sqlite
-  const someString = query.all()?.[0]?.json;
-  if (someString == undefined) {
+  const firstResult = query.all()?.[0]?.json;
+  if (firstResult == undefined) {
     return {};
   }
-  console.log(someString);
-  return JSON.parse(String(someString));
+  return JSON.parse(String(firstResult));
 }

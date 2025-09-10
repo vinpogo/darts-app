@@ -27,8 +27,8 @@ app.get("/", serveAI);
 
 app.post("/", async (c) => {
   const shots: DartShot[] = await c.req.json();
-  processShotList(shots);
-  return c.body("Dart Shots processed", 201, {
+  const newAims = processShotList(shots);
+  return c.json(newAims, 201, {
     "Content-Type": "text/plain",
   });
 });

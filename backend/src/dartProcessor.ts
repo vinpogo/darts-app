@@ -7,12 +7,16 @@ export type DartShot = {
 };
 
 export function processShotList(shots: DartShot[]) {
+  const newScoringAverages: ScoringAverage[] = [];
   shots.forEach((shot) => {
     let scoringAverage = getScoringAverage(shot.aim);
     // Update the values of the scoring average
     const newScoringAverage = calculateScoringAverage(scoringAverage.new, shot);
+    newScoringAverages.push(newScoringAverage);
     addAims({ ...scoringAverage.all, ...newScoringAverage });
   });
+
+  return newScoringAverages;
 }
 
 type FieldWithout0 = Exclude<Field, "0">;
