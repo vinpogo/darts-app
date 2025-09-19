@@ -3,7 +3,7 @@ import Score from './score/Score.vue'
 import ButtonInput from './input/ButtonsInput.vue'
 import DartService from './services/DartService'
 import { ref } from 'vue'
-import { Field, Suggestion } from '../../shared/types'
+import type { Field, Suggestion } from '../../shared/types'
 
 function handleSubmit() {
   try {
@@ -62,6 +62,9 @@ function selectSuggestion(index: number) {
 
 function updateResult(field: Field) {
   suggestion.value.score[selectedSuggestion.value] = field
+  const next = (selectedSuggestion.value + 1) % 3
+  selectSuggestion(next)
+  if (next === 0) handleSubmit()
 }
 </script>
 
@@ -76,7 +79,7 @@ function updateResult(field: Field) {
     <ButtonInput
       :value="suggestion.score[selectedSuggestion]"
       @submit="handleSubmit"
-      @input="updateResult"
+      @score="updateResult"
     />
   </div>
 </template>
