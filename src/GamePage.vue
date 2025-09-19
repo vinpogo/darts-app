@@ -61,9 +61,9 @@ function selectSuggestion(index: number) {
 
 function updateResult(field: any) {
   suggestion.value.score[selectedSuggestion.value] = field
-  if (selectedSuggestion.value <= 2) {
-    selectedSuggestion.value++
-  }
+  const next = (selectedSuggestion.value + 1) % 3
+  selectSuggestion(next)
+  if (next === 0) handleSubmit()
 }
 </script>
 
@@ -78,7 +78,7 @@ function updateResult(field: any) {
     <ButtonInput
       :value="suggestion.score[selectedSuggestion]"
       @submit="handleSubmit"
-      @input="updateResult"
+      @score="updateResult"
     />
   </div>
 </template>
