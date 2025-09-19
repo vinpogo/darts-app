@@ -16,9 +16,26 @@ async function handleSubmit() {
       }
     }, {})
     await DartService.submit(toSubmit)
+    let newScore = totalScore.value
     suggestion.value.score.forEach((s) => {
-      totalScore.value -= convertScore(s)
+      newScore -= convertScore(s)
     })
+    if (newScore > 1) {
+      totalScore.value = newScore
+    } else if (newScore === 0) {
+      // TODO: actually we should show a stats screen with a next game button
+      let isDone = false
+      for (let i = 2; i >= 0; i--) {
+        const dart = toSubmit[i]
+        if (dart.hit === '0') continue
+        if (dart.hit.startsWith('D')) {
+          isDone = true
+          break
+        }
+        selectSuggestion(0)
+      }
+      if (isDone) totalScore.value = STARTING_SCORE
+    }
 
     const data = await DartService.getSuggestion(totalScore.value)
     suggestion.value.score = data.data.checkout
@@ -49,7 +66,8 @@ function convertScore(score: Field) {
   return actualValue * multiplier
 }
 
-const totalScore = ref<number>(501)
+const STARTING_SCORE = 101
+const totalScore = ref<number>(STARTING_SCORE)
 const initialScore = ref<Field[]>(['T20', 'T20', 'D20'])
 
 const suggestion = ref<Suggestion>({
