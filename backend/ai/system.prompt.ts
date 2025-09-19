@@ -24,7 +24,7 @@ const example1 = `
 ## Output
 {
   checkout: ["T20","T20","T20"],
-  explaination: "With a score of 320, there is no 3-dart checkout, so it's best to bring down the points as much as possible. You are good at hitting 20s (100% successes), so using the 20 segment (20, D20, T20) is optimal. Throwing [T20, T20, T20] reduces your score by 180 and sets up an ideal finish.",
+  explanation: "With a score of 320, there is no 3-dart checkout, so it's best to bring down the points as much as possible. You are good at hitting 20s (100% successes), so using the 20 segment (20, D20, T20) is optimal. Throwing [T20, T20, T20] reduces your score by 180 and sets up an ideal finish.",
 }
 
 
@@ -67,7 +67,7 @@ const example2 = `
 ## Output
 {
   checkout: ["5","D20"],
-  explaination: "Aim at 5. When trying on 5, you have a chance of 50% - 5 and 50% - 13.
+  explanation: "Aim at 5. When trying on 5, you have a chance of 50% - 5 and 50% - 13.
 With 5, you can go for D20.
 With 13, you can finish safely on D16.
 Combined, this gives a probability of 0.5*1.0 (13 + D16) or 0.5*0.2 (5 + D20).
@@ -120,7 +120,7 @@ const example3 = `
 
 {
   checkout: ["T15","D8"],
-  explaination: "Start with T15.
+  explanation: "Start with T15.
 With T15 (and 16 left) you can go for D8 (40%).
 Starting with T7 has only a 10% chance.
 [T11, D14] has a probability of not finishing the game based on your aiming history.
@@ -137,7 +137,7 @@ YOU MUST ALWAYS RETURN JSON!
 HERE IS THE ZOD SCHEMA:
 z.object({
   checkout: z.array(z.string()),
-  explaination: z.string(),
+  explanation: z.string(),
 });
 
 # Game Rules & Scoring:
@@ -175,7 +175,7 @@ The current score.
 A list of all possible checkouts for the player's current score.
 
 # Output
-Return the best next shot based on the probability combination and an short and compact explaination.
+Return the best next shot based on the probability combination and an short and compact explanation.
 
 ## Output Format
 [T19, T19, D20]

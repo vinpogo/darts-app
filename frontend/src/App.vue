@@ -10,18 +10,17 @@ function handleSubmit() {
     const toSubmit = suggestion.value.score.map((s, i) => {
       return {
         aim: initialScore.value[i],
-        hit: s
+        hit: s,
       }
     }, {})
     DartService.submit(toSubmit).then(() => {
-
       suggestion.value.score.forEach((s) => {
         totalScore.value -= convertScore(s)
       })
 
       DartService.getSuggestion(totalScore.value).then((data) => {
         suggestion.value.score = data.data.checkout
-        suggestion.value.longExplanation = data.data.explanation
+        suggestion.value.explanation = data.data.explanation
         initialScore.value = data.data.checkout
       })
     })
@@ -29,7 +28,6 @@ function handleSubmit() {
 }
 
 function convertScore(score: Field) {
-  
   let multiplier = 1
   let actualValue = 0
 
@@ -47,7 +45,6 @@ function convertScore(score: Field) {
     actualValue = Number(score)
   }
   return actualValue * multiplier
-
 }
 
 const totalScore = ref<number>(501)
@@ -55,7 +52,7 @@ const initialScore = ref<Field[]>(['T20', 'T20', 'D20'])
 
 const suggestion = ref<Suggestion>({
   score: ['T20', 'T20', 'D20'],
-  longExplanation: "you're just suck",
+  explanation: "you're just suck",
 })
 const selectedSuggestion = ref<number>(0)
 
@@ -70,7 +67,6 @@ function updateResult(field: Field) {
 
 <template>
   <div>
-    {{ selectedSuggestion }}
     <Score
       :total-score="totalScore"
       :suggestion="suggestion"

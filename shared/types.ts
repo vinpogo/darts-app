@@ -94,5 +94,5 @@ export type PossibleCheckouts = Field[][]
 
 export type Suggestion = {
   score: Field[]
-  longExplanation: string
+  explanation: string
 }

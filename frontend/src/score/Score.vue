@@ -24,8 +24,11 @@ const emit = defineEmits<{
           >{{ sg }}</span
         >
       </template>
-      <span v-tooltip="suggestion.longExplanation" class="pi pi-question-circle"></span>
+      <!-- <span v-tooltip="suggestion.explanation" class="pi pi-question-circle"></span> -->
     </div>
+    <span class="text-center">
+      {{ suggestion.explanation }}
+    </span>
   </div>
 </template>
 
