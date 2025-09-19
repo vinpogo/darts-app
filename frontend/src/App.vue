@@ -16,9 +16,14 @@ async function handleSubmit() {
       }
     }, {})
     await DartService.submit(toSubmit)
+    let newScore = totalScore.value
     suggestion.value.score.forEach((s) => {
-      totalScore.value -= convertScore(s)
+      newScore -= convertScore(s)
     })
+    if (newScore > 1) {
+      totalScore.value = newScore
+    } else if (newScore === 0) {
+    }
 
     const data = await DartService.getSuggestion(totalScore.value)
     suggestion.value.score = data.data.checkout
