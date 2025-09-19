@@ -62,6 +62,9 @@ function selectSuggestion(index: number) {
 
 function updateResult(field: Field) {
   suggestion.value.score[selectedSuggestion.value] = field
+  if (selectedSuggestion.value <= 2) {
+    selectedSuggestion.value++
+  }
 }
 </script>
 
