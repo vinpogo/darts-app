@@ -33,7 +33,7 @@ const gpt5: OpenAIModelConfig = {
 };
 
 const ollama: OllamaModelConfig = {
-  model: "qwen3:4b-instruct-2507-q4_K_M",
+  model: "qwen3:4b",
 };
 
 const client = new OpenAI({
@@ -49,7 +49,7 @@ export const CheckoutSchema = z.object({
 
 interface CheckoutTargetsProp {
   aims: ScoringAverage;
-  possibilities:Field[][];
+  possibilities: Field[][];
   score: number;
 }
 export async function getCheckoutTargets(args: CheckoutTargetsProp): Promise<{
@@ -97,7 +97,9 @@ Return it in JSON strictly matching the schema.
   }
 
   try {
-    const result = CheckoutSchema.parse(JSON.parse(jsonText));
+    // The AI sometimes returned the JSON in a wrong format with a trailing comma, so we implemented string parsing
+    const filteredJson = jsonText.replace(/,\s*}/g, "}");
+    const result = CheckoutSchema.parse(JSON.parse(filteredJson));
     return result;
   } catch {
     throw new Error("Invalid JSON from AI: " + jsonText);
