@@ -24,6 +24,7 @@ function handleSubmit() {
         initialScore.value = data.data.checkout
       })
     })
+    selectedSuggestion.value = 0
   } catch {}
 }
 
