@@ -5,26 +5,28 @@ import DartService from './services/DartService'
 import { ref } from 'vue'
 import type { Field, Suggestion } from '../../shared/types'
 
-function handleSubmit() {
+const waitingForAi = ref(false)
+async function handleSubmit() {
   try {
+    waitingForAi.value = true
     const toSubmit = suggestion.value.score.map((s, i) => {
       return {
         aim: initialScore.value[i],
         hit: s,
       }
     }, {})
-    DartService.submit(toSubmit).then(() => {
-      suggestion.value.score.forEach((s) => {
-        totalScore.value -= convertScore(s)
-      })
-
-      DartService.getSuggestion(totalScore.value).then((data) => {
-        suggestion.value.score = data.data.checkout
-        suggestion.value.explanation = data.data.explanation
-        initialScore.value = data.data.checkout
-      })
+    await DartService.submit(toSubmit)
+    suggestion.value.score.forEach((s) => {
+      totalScore.value -= convertScore(s)
     })
-  } catch {}
+
+    const data = await DartService.getSuggestion(totalScore.value)
+    suggestion.value.score = data.data.checkout
+    suggestion.value.explanation = data.data.explanation
+    initialScore.value = data.data.checkout
+  } finally {
+    waitingForAi.value = false
+  }
 }
 
 function convertScore(score: Field) {
@@ -74,6 +76,7 @@ function updateResult(field: Field) {
       :total-score="totalScore"
       :suggestion="suggestion"
       :selected-suggestion="selectedSuggestion"
+      :loading="waitingForAi"
       @select-suggestion="selectSuggestion"
     />
     <ButtonInput
