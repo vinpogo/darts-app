@@ -84,34 +84,45 @@ function rest(score: number, darts: Field[]): number {
   return darts.reduce((res, dart) => res - scoringTable[dart], score);
 }
 
+function isPathFinished(score: number, darts: Field[]): boolean {
+  const r = rest(score, darts);
+  if (r !== 0) return false;
+  if (!darts.at(-1)?.startsWith("D")) return false;
+  return true;
+}
+
+function splitArray<T>(arr: T[], predicate: (arg: T) => boolean): [T[], T[]] {
+  const trues: T[] = [];
+  const falses: T[] = [];
+  for (const el of arr) {
+    if (predicate(el)) trues.push(el);
+    else falses.push(el);
+  }
+  return [trues, falses];
+}
+
 function possibilities(score: number): Field[][] {
+  const getFinishedAndOpens = (paths: Field[][]) =>
+    splitArray(paths, (path) => isPathFinished(score, path));
+  const isPathValid = (path: Field[]) => {
+    const r = rest(score, path);
+    if (r < 0) return false;
+    if (r === 0 && !path.at(-1)?.startsWith("D")) return false;
+    return true;
+  };
   const afterFirstDart = initialPossiblities(score);
-  const afterSecondDart = afterFirstDart
+  const [oneDartFinishes, openAfterFirstDart] =
+    getFinishedAndOpens(afterFirstDart);
+  const afterSecondDart = openAfterFirstDart
     .flatMap((path) => fields.map((field) => [...path, field]))
-    .filter((path) => {
-      const r = rest(score, path);
-      if (r < 0) return false;
-      if (r === 0 && path.at(-1) === "0") return true;
-      if (r === 0 && !path.at(-1)?.startsWith("D")) return false;
-      return true;
-    });
-  const afterThirdDart = afterSecondDart
+    .filter(isPathValid);
+  const [twoDartFinished, openAfterSecondDart] =
+    getFinishedAndOpens(afterSecondDart);
+  const afterThirdDart = openAfterSecondDart
     .flatMap((path) => fields.map((field) => [...path, field]))
-    .filter((path) => {
-      const r = rest(score, path);
-      if (r !== 0) return false;
-      if (r === 0 && path.at(-1) === "0") return true;
-      if (r === 0 && !path.at(-1)?.startsWith("D")) return false;
-      return true;
-    });
-  // .map((path) =>
-  //   path.reduceRight<Field[]>((res, field) => {
-  //     if (field === "0" && res.length !== 0) res.unshift(field);
-  //     if (field !== "0") res.unshift(field);
-  //     return res;
-  //   }, [])
-  // );
-  return afterThirdDart;
+    .filter(isPathValid);
+  const [threeDartFinished, _] = getFinishedAndOpens(afterThirdDart);
+  return [...oneDartFinishes, ...twoDartFinished, ...threeDartFinished];
 }
 
 function getAllPossibilities() {
