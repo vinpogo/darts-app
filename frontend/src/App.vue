@@ -3,29 +3,30 @@ import Score from './score/Score.vue'
 import ButtonInput from './input/ButtonsInput.vue'
 import DartService from './services/DartService'
 import { ref } from 'vue'
-import { Field, Suggestion } from '../../shared/types'
+import type { Field, Suggestion } from '../../shared/types'
 
-function handleSubmit() {
+const waitingForAi = ref(false)
+async function handleSubmit() {
   try {
+    waitingForAi.value = true
     const toSubmit = suggestion.value.score.map((s, i) => {
       return {
         aim: initialScore.value[i],
         hit: s,
       }
     }, {})
-    DartService.submit(toSubmit).then(() => {
-      suggestion.value.score.forEach((s) => {
-        totalScore.value -= convertScore(s)
-      })
-
-      DartService.getSuggestion(totalScore.value).then((data) => {
-        suggestion.value.score = data.data.checkout
-        suggestion.value.explanation = data.data.explanation
-        initialScore.value = data.data.checkout
-      })
+    await DartService.submit(toSubmit)
+    suggestion.value.score.forEach((s) => {
+      totalScore.value -= convertScore(s)
     })
-    selectedSuggestion.value = 0
-  } catch {}
+
+    const data = await DartService.getSuggestion(totalScore.value)
+    suggestion.value.score = data.data.checkout
+    suggestion.value.explanation = data.data.explanation
+    initialScore.value = data.data.checkout
+  } finally {
+    waitingForAi.value = false
+  }
 }
 
 function convertScore(score: Field) {
@@ -63,9 +64,9 @@ function selectSuggestion(index: number) {
 
 function updateResult(field: Field) {
   suggestion.value.score[selectedSuggestion.value] = field
-  if (selectedSuggestion.value <= 2) {
-    selectedSuggestion.value++
-  }
+  const next = (selectedSuggestion.value + 1) % 3
+  selectSuggestion(next)
+  if (next === 0) handleSubmit()
 }
 </script>
 
@@ -75,12 +76,13 @@ function updateResult(field: Field) {
       :total-score="totalScore"
       :suggestion="suggestion"
       :selected-suggestion="selectedSuggestion"
+      :loading="waitingForAi"
       @select-suggestion="selectSuggestion"
     />
     <ButtonInput
       :value="suggestion.score[selectedSuggestion]"
       @submit="handleSubmit"
-      @input="updateResult"
+      @score="updateResult"
     />
   </div>
 </template>
