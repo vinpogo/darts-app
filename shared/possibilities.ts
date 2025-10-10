@@ -1,6 +1,6 @@
-import { Field } from "./types";
+import type { Field } from './types.ts'
 
-const scoringTable: Record<Exclude<Field, "0">, number> = {
+const scoringTable: Record<Exclude<Field, '0'>, number> = {
   1: 1,
   D1: 2,
   T1: 3,
@@ -63,73 +63,76 @@ const scoringTable: Record<Exclude<Field, "0">, number> = {
   T20: 60,
   Bull: 25,
   DBull: 50,
-};
+}
 
-const fields = Object.keys(scoringTable) as Field[];
+const fields = Object.keys(scoringTable) as Field[]
 
-const checkoutScores = Array.from({ length: 170 }).map((_, i) => i + 1);
+const checkoutScores = Array.from({ length: 170 }).map((_, i) => i + 1)
 
 function initialPossiblities(score: number): Field[][] {
   return fields
     .filter((field) => {
-      const r = rest(score, [field]);
-      if (r < 0) return false;
-      if (r === 0 && !field.startsWith("D")) return false;
-      return true;
+      const r = rest(score, [field])
+      if (r < 0) return false
+      if (r === 0 && !field.startsWith('D')) return false
+      return true
     })
-    .map((field) => [field]);
+    .map((field) => [field])
 }
 
 function rest(score: number, darts: Field[]): number {
-  return darts.reduce((res, dart) => res - scoringTable[dart], score);
+  return darts.reduce((res, dart) => res - scoringTable[dart], score)
 }
 
 function isPathFinished(score: number, darts: Field[]): boolean {
-  const r = rest(score, darts);
-  if (r !== 0) return false;
-  if (!darts.at(-1)?.startsWith("D")) return false;
-  return true;
+  const r = rest(score, darts)
+  if (r !== 0) return false
+  if (!darts.at(-1)?.startsWith('D')) return false
+  return true
 }
 
 function splitArray<T>(arr: T[], predicate: (arg: T) => boolean): [T[], T[]] {
-  const trues: T[] = [];
-  const falses: T[] = [];
+  const trues: T[] = []
+  const falses: T[] = []
   for (const el of arr) {
-    if (predicate(el)) trues.push(el);
-    else falses.push(el);
+    if (predicate(el)) trues.push(el)
+    else falses.push(el)
   }
-  return [trues, falses];
+  return [trues, falses]
 }
 
-function possibilities(score: number): Field[][] {
+export function possibilities(score: number): Field[][] {
   const getFinishedAndOpens = (paths: Field[][]) =>
-    splitArray(paths, (path) => isPathFinished(score, path));
+    splitArray(paths, (path) => isPathFinished(score, path))
   const isPathValid = (path: Field[]) => {
-    const r = rest(score, path);
-    if (r < 0) return false;
-    if (r === 0 && !path.at(-1)?.startsWith("D")) return false;
-    return true;
-  };
-  const afterFirstDart = initialPossiblities(score);
-  const [oneDartFinishes, openAfterFirstDart] =
-    getFinishedAndOpens(afterFirstDart);
+    const r = rest(score, path)
+    if (r < 0) return false
+    if (r === 0 && !path.at(-1)?.startsWith('D')) return false
+    return true
+  }
+  const afterFirstDart = initialPossiblities(score)
+  const [oneDartFinishes, openAfterFirstDart] = getFinishedAndOpens(
+    afterFirstDart,
+  )
   const afterSecondDart = openAfterFirstDart
     .flatMap((path) => fields.map((field) => [...path, field]))
-    .filter(isPathValid);
-  const [twoDartFinished, openAfterSecondDart] =
-    getFinishedAndOpens(afterSecondDart);
+    .filter(isPathValid)
+  const [twoDartFinished, openAfterSecondDart] = getFinishedAndOpens(
+    afterSecondDart,
+  )
   const afterThirdDart = openAfterSecondDart
     .flatMap((path) => fields.map((field) => [...path, field]))
-    .filter(isPathValid);
-  const [threeDartFinished, _] = getFinishedAndOpens(afterThirdDart);
-  return [...oneDartFinishes, ...twoDartFinished, ...threeDartFinished];
+    .filter(isPathValid)
+  const [threeDartFinished, _] = getFinishedAndOpens(afterThirdDart)
+  return [...oneDartFinishes, ...twoDartFinished, ...threeDartFinished]
 }
 
-function getAllPossibilities() {
+export function getAllPossibilities() {
   return checkoutScores.reduce((res, score) => {
-    res[score] = possibilities(score);
-    return res;
-  }, {});
+    res[score] = possibilities(score)
+    return res
+  }, {} as Record<number, Field[][]>)
 }
 
-console.log(JSON.stringify(getAllPossibilities()));
+// console.log(JSON.stringify(getAllPossibilities()));
+// console.log(getP)

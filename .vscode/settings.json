@@ -1,0 +1,7 @@
+{
+  "deno.enable": true,
+  "deno.lint": true,
+  "deno.suggest.imports.autoDiscover": true,
+  "editor.codeActionsOnSave": {"source.organizeImports": "always"},
+  "editor.defaultFormatter": "denoland.vscode-deno"
+}
