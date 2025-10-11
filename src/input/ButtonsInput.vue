@@ -30,9 +30,9 @@
 </template>
 
 <script setup lang="ts">
-import { SelectButton, Button, SelectButtonChangeEvent } from 'primevue'
+import { Button, SelectButton, SelectButtonChangeEvent } from 'primevue'
 import { ref } from 'vue'
-import { Field } from '../../../shared/types'
+import { Field } from '../../packages/types/board'
 
 const props = defineProps<{
   value: Field

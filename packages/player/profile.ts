@@ -1,4 +1,5 @@
-import { Field, Miss } from '../types/board.ts'
+import type { PossibleCheckouts } from '../../shared/types.ts'
+import { Field, Miss, possibleCheckouts } from '../types/board.ts'
 
 export type Stats = Record<Field | Miss, number>
 
@@ -24,7 +25,7 @@ export const randomStats = () => {
 }
 const randomInt = () => Math.round(Math.random() * 1_000)
 const randomCheckoutChance = (): Profile['checkoutChance'] =>
-  Array.from(Array(179)).reduce((res, _, i) => {
+  Array.from(Array(170)).reduce((res, _, i) => {
     res[i + 1] = { rate: Math.random(), attempts: randomInt() }
     return res
   }, {})
@@ -39,3 +40,47 @@ export const randomProfile = (): Profile => ({
   }, {} as Profile['hitRates']),
   checkoutChance: randomCheckoutChance(),
 })
+
+export const emptyStats = (): Stats =>
+  [...Field, Miss]
+    .reduce((res, field) => {
+      res[field] = 0
+      return res
+    }, {} as Stats)
+
+export const emptyCheckouts = (): Profile['checkoutChance'] =>
+  possibleCheckouts
+    .reduce((res, checkout) => {
+      res[checkout] = { attempts: 0, rate: 1 }
+      return res
+    }, {} as Profile['checkoutChance'])
+export const emptyProfile = (): Profile => ({
+  hitRates: Field.reduce((res, field) => {
+    res[field] = {
+      stats: emptyStats(),
+      darts: 0,
+    }
+    return res
+  }, {} as Profile['hitRates']),
+  checkoutChance: emptyCheckouts(),
+})
+
+export const upsertField = (
+  hitRates: Profile['hitRates'][Field],
+  field: Field,
+): Profile['hitRates'][Field] => {
+  const clone = structuredClone(hitRates)
+
+  const oldDarts = clone.darts
+  const newDarts = clone.darts + 1
+  const newStats = Object.entries(clone.stats)
+    .reduce((res, [f, chance]) => {
+      const darts = chance * oldDarts + Number(field === f)
+      res[f as (Field | Miss)] = darts / newDarts
+      return res
+    }, {} as Stats)
+  return {
+    stats: newStats,
+    darts: newDarts,
+  }
+}

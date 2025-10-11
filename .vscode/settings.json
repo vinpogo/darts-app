@@ -1,7 +1,12 @@
 {
   "deno.enable": true,
+  "deno.disablePaths": ["src"],
   "deno.lint": true,
   "deno.suggest.imports.autoDiscover": true,
   "editor.codeActionsOnSave": {"source.organizeImports": "always"},
-  "editor.defaultFormatter": "denoland.vscode-deno"
+  "editor.defaultFormatter": "denoland.vscode-deno",
+  "[vue]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  },
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

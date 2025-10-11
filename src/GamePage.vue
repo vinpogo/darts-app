@@ -1,34 +1,32 @@
 <script setup lang="ts">
-import Score from './score/Score.vue'
-import ButtonInput from './input/ButtonsInput.vue'
-import DartService from './services/DartService'
 import { ref } from 'vue'
-import { Field, Suggestion } from '../../shared/types'
+import ButtonInput from './input/ButtonsInput.vue'
+import Score from './score/Score.vue'
 
 function handleSubmit() {
   try {
-    const toSubmit = suggestion.value.score.map((s, i) => {
+    const toSubmit = suggestion.value.score.map((s: any, i: any) => {
       return {
         aim: initialScore.value[i],
         hit: s,
       }
     }, {})
-    DartService.submit(toSubmit).then(() => {
-      suggestion.value.score.forEach((s) => {
-        totalScore.value -= convertScore(s)
-      })
+    // DartService.submit(toSubmit).then(() => {
+    //   suggestion.value.score.forEach((s) => {
+    //     totalScore.value -= convertScore(s)
+    //   })
 
-      DartService.getSuggestion(totalScore.value).then((data) => {
-        suggestion.value.score = data.data.checkout
-        suggestion.value.explanation = data.data.explanation
-        initialScore.value = data.data.checkout
-      })
-    })
+    //   DartService.getSuggestion(totalScore.value).then((data) => {
+    //     suggestion.value.score = data.data.checkout
+    //     suggestion.value.explanation = data.data.explanation
+    //     initialScore.value = data.data.checkout
+    //   })
+    // })
     selectedSuggestion.value = 0
   } catch {}
 }
 
-function convertScore(score: Field) {
+function convertScore(score: any) {
   let multiplier = 1
   let actualValue = 0
 
@@ -49,9 +47,9 @@ function convertScore(score: Field) {
 }
 
 const totalScore = ref<number>(501)
-const initialScore = ref<Field[]>(['T20', 'T20', 'D20'])
+const initialScore = ref<any[]>(['T20', 'T20', 'D20'])
 
-const suggestion = ref<Suggestion>({
+const suggestion = ref<any>({
   score: ['T20', 'T20', 'D20'],
   explanation: "you're just suck",
 })
@@ -61,7 +59,7 @@ function selectSuggestion(index: number) {
   selectedSuggestion.value = index
 }
 
-function updateResult(field: Field) {
+function updateResult(field: any) {
   suggestion.value.score[selectedSuggestion.value] = field
   if (selectedSuggestion.value <= 2) {
     selectedSuggestion.value++

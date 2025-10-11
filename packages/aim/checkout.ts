@@ -82,5 +82,4 @@ export const getBestCheckout = (score: number, profile: Profile): Path =>
       path,
       chance: resolvePath(path, profile, score),
     }))
-    .sort((optionA, optionB) => optionA.chance > optionB.chance ? 1 : -1)[0]
-    ?.path ?? []
+    .sort((optionA, optionB) => optionA.chance > optionB.chance ? 1 : -1)
