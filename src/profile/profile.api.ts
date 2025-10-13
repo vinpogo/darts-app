@@ -1,5 +1,16 @@
 import ky from 'ky'
-import { ProfileCreation } from '../../packages/player/profileCreator'
+import { Profile } from '../../packages/player/profile'
+import {
+  CreationStep,
+  ProfileCreation,
+} from '../../packages/player/profileCreator'
 
 export const getNewProfileApi = () =>
-  ky.get<ProfileCreation>('/profile/creat/new').json()
+  ky.get<ProfileCreation>('/api/profile/create/new').json()
+
+export const postContinueProfileApi = (step: CreationStep) =>
+  ky.post<Profile | ProfileCreation>('/api/profile/create/continue', {
+    json: step,
+  }).json()
+
+export const getProfileApi = () => ky.get<Profile>('/api/profile').json()

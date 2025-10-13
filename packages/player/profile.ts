@@ -1,4 +1,3 @@
-import type { PossibleCheckouts } from '../../shared/types.ts'
 import { Field, Miss, possibleCheckouts } from '../types/board.ts'
 
 export type Stats = Record<Field | Miss, number>

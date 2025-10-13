@@ -11,6 +11,10 @@ export const router = createRouter({
         component: () => import('./profile/ProfilePage.vue'),
       },
       {
+        path: '/profile/new',
+        component: () => import('./profile/NewProfilePage.vue'),
+      },
+      {
         path: '/game',
         component: () => import('./GamePage.vue'),
       },

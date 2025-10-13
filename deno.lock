@@ -23,6 +23,7 @@
     "npm:ky@^1.11.0": "1.11.0",
     "npm:primeicons@7": "7.0.0",
     "npm:primevue@^4.4.1": "4.4.1_vue@3.5.22__typescript@5.9.3_typescript@5.9.3",
+    "npm:tailwindcss-primeui@~0.6.1": "0.6.1_tailwindcss@4.1.14",
     "npm:tailwindcss@^4.1.14": "4.1.14",
     "npm:typescript@^5.9.3": "5.9.3",
     "npm:vite@*": "7.1.9_picomatch@4.0.3",
@@ -887,6 +888,12 @@
     "source-map-js@1.2.1": {
       "integrity": "sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA=="
     },
+    "tailwindcss-primeui@0.6.1_tailwindcss@4.1.14": {
+      "integrity": "sha512-T69Rylcrmnt8zy9ik+qZvsLuRIrS9/k6rYJSIgZ1trnbEzGDDQSCIdmfyZknevqiHwpSJHSmQ9XT2C+S/hJY4A==",
+      "dependencies": [
+        "tailwindcss"
+      ]
+    },
     "tailwindcss@4.1.14": {
       "integrity": "sha512-b7pCxjGO98LnxVkKjaZSDeNuljC4ueKUddjENJOADtubtdo8llTaJy7HwBMeLNSSo2N5QIAgklslK1+Ir8r6CA=="
     },
@@ -981,6 +988,7 @@
       "npm:ky@^1.11.0",
       "npm:primeicons@7",
       "npm:primevue@^4.4.1",
+      "npm:tailwindcss-primeui@~0.6.1",
       "npm:tailwindcss@^4.1.14",
       "npm:typescript@^5.9.3",
       "npm:vite@^7.1.9",

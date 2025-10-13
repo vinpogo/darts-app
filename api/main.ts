@@ -1,13 +1,18 @@
+import { NotOk } from '@untier/result'
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { getBestCheckout } from '../packages/aim/checkout.ts'
-import { randomProfile } from '../packages/player/profile.ts'
+import { get } from '../packages/data/db.ts'
+import {
+  emptyProfile,
+  type Profile,
+  randomProfile,
+} from '../packages/player/profile.ts'
 import {
   addStep,
   type CreationStep,
   startProfileCreation,
 } from '../packages/player/profileCreator.ts'
-import { NotOk } from '@untier/result'
 
 const app = new Hono()
   .basePath('/api')
@@ -22,6 +27,11 @@ const app = new Hono()
       T20: profile.hitRates['T20'].stats,
       T19: profile.hitRates['T19'].stats,
     })
+  })
+  .get('/profile', async (c) => {
+    const profile = await get<Profile>(['profile'])
+    if (profile instanceof NotOk) return c.json(emptyProfile())
+    return c.json(profile.value)
   })
   .get('/profile/create/new', async (c) => {
     const res = await startProfileCreation()
