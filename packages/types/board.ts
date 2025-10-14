@@ -299,4 +299,4 @@ export const possibleCheckouts = [
 
 // deno-lint-ignore no-explicit-any
 export const isField = (o: any): o is Field => Field.includes(o)
-export const fieldToScore = (field: Field): number => scoreMap[field]
+export const fieldToScore = (field: Field | Miss): number => scoreMap[field]

@@ -14,8 +14,12 @@
           {{ s }}
         </button>
       </template>
-      {{ canUndo }}
-      <Button icon="pi-undo" :disabled="!canUndo" @click="undo" />
+      <Button
+        icon="pi pi-undo"
+        :disabled="!canUndo"
+        @click="onUndo"
+        severity="secondary"
+      />
     </div>
     <div class="grid grid-rows-4 grid-cols-5 gap-5">
       <template v-for="number in numbers" :key="number">
@@ -35,20 +39,21 @@
 </template>
 
 <script setup lang="ts">
+import { useRefHistory } from '@vueuse/core'
 import { Button } from 'primevue'
 import { ref } from 'vue'
-import { useUndoRef } from '../../packages/helpers/undoRef'
 import { Field, Miss } from '../../packages/types/board'
 import NumberButton from './NumberButton.vue'
 
 const emit = defineEmits<{
-  score: [Field | Miss]
+  score: [(Field | Miss)[]]
   submit: [void]
 }>()
 
 const numbers = ref(Array.from({ length: 20 }, (_, i) => String(i + 1)))
 
-const { theRef: scores, canUndo, undo } = useUndoRef<(Field | Miss)[]>([])
+const scores = ref<(Field | Miss)[]>([])
+const { canUndo, undo } = useRefHistory(scores, { deep: true })
 const editIndex = ref<number>()
 
 function inputNumber(number: string) {
@@ -59,10 +64,16 @@ function inputNumber(number: string) {
   } else {
     scores.value.push(n)
   }
-  emit('score', n)
+  emit('score', scores.value)
+}
+
+function onUndo() {
+  undo()
+  emit('score', scores.value)
 }
 
 function submit() {
   emit('submit')
+  scores.value = []
 }
 </script>

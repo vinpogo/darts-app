@@ -1,8 +1,10 @@
 import { NotOk } from '@untier/result'
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
+import { logger } from 'hono/logger'
 import { getBestCheckout } from '../packages/aim/checkout.ts'
 import { get } from '../packages/data/db.ts'
+import { gameController } from '../packages/games/game.controller.ts'
 import {
   emptyProfile,
   type Profile,
@@ -43,10 +45,13 @@ const app = new Hono()
   .post('/profile/create/continue', async (c) => {
     const step = await c.req.json<CreationStep>()
     const res = await addStep(step)
+    console.log('--------')
     if (res instanceof NotOk) {
       throw new HTTPException(500)
     }
     return c.json(res.value)
   })
+app.use(logger())
+app.route('/game', gameController)
 
 Deno.serve({ port: 8080 }, app.fetch)

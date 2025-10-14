@@ -3,7 +3,7 @@
   "deno.disablePaths": ["src"],
   "deno.lint": true,
   "deno.suggest.imports.autoDiscover": true,
-  "editor.codeActionsOnSave": {"source.organizeImports": "always"},
+  "editor.codeActionsOnSave": { "source.organizeImports": "always" },
   "editor.defaultFormatter": "denoland.vscode-deno",
   "[vue]": {
     "editor.defaultFormatter": "denoland.vscode-deno"

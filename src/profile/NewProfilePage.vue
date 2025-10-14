@@ -9,7 +9,7 @@ const profile = ref<ProfileCreation>()
 const currentTarget = computed(() => profile.value?.target)
 
 const scores = ref<(Field | Miss)[]>([])
-const pushScore = (s: Field | Miss) => scores.value.push(s)
+const pushScore = (s: (Field | Miss)[]) => scores.value = s
 
 const submitScores = async () => {
   const res = await postContinueProfileApi({

@@ -1,6 +1,6 @@
 import { Field, isField } from 'types/board.ts'
-import type { Stats } from '../../shared/playerProfile.ts'
-import type { Profile } from '../player/profile.ts'
+import { descending } from '../helpers/sort.ts'
+import type { Profile, Stats } from '../player/profile.ts'
 import {
   isPossible,
   isResolved,
@@ -82,4 +82,4 @@ export const getBestCheckout = (score: number, profile: Profile): Path =>
       path,
       chance: resolvePath(path, profile, score),
     }))
-    .sort((optionA, optionB) => optionA.chance > optionB.chance ? 1 : -1)
+    .sort(descending(({ chance }) => chance))[0]!.path

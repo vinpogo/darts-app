@@ -1,39 +1,21 @@
 <script setup lang="ts">
-import { Suggestion } from '../../../shared/types'
+import { Path } from '../../packages/aim/path'
 
 const props = defineProps<{
   totalScore: number
-  suggestion: Suggestion
-  selectedSuggestion: number
-}>()
-
-const emit = defineEmits<{
-  (e: 'selectSuggestion', index: number): void
+  suggestions: Path
 }>()
 </script>
 
 <template>
   <div class="flex flex-col justify-center items-center">
     <h1 class="text-9xl font-bold">{{ totalScore }}</h1>
-    <div class="flex items-center gap-5">
-      <template v-for="(sg, index) in suggestion.score" :key="index">
-        <button
-          class="text-2xl cursor-pointer"
-          :class="{ 'text-red-500': selectedSuggestion === index }"
-          @click="emit('selectSuggestion', index)"
-        >
+    <div class="flex text-2xl items-center gap-5">
+      <template v-for="(sg, index) in suggestions" :key="index">
+        <div>
           {{ sg }}
-        </button>
+        </div>
       </template>
-      <!-- <span v-tooltip="suggestion.explanation" class="pi pi-question-circle"></span> -->
     </div>
-    <span class="text-center">
-      {{ suggestion.explanation }}
-    </span>
   </div>
 </template>
-
-<style>
-@import 'tailwindcss';
-@import 'primeicons/primeicons.css';
-</style>
