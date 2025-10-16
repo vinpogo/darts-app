@@ -28,5 +28,5 @@ const arePathsEqual = (a: ResolvingPath, b: ResolvingPath) => {
   }
   return true
 }
-export const isPossible = (path: ResolvingPath, target: number): boolean =>
+export const isCheckout = (path: ResolvingPath, target: number): boolean =>
   getCheckouts(target).some((p) => arePathsEqual(path, p))

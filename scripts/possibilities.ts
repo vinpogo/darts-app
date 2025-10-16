@@ -1,5 +1,5 @@
+import type { Field } from 'types/board.ts'
 import { splitArray } from '../packages/helpers/array.ts'
-import type { Field } from '../shared/types.ts'
 
 const scoringTable: Record<Exclude<Field, '0'>, number> = {
   1: 1,
@@ -136,4 +136,4 @@ export const getAllCheckouts = () =>
 //   JSON.stringify(getAllCheckouts(), null, 2),
 // )
 // console.log(JSON.stringify(getAllPossibilities()));
-console.log(getCheckoutsForScore(170, 1))
+console.log(getCheckoutsForScore(100, 0))
