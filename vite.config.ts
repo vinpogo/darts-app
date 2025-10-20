@@ -8,13 +8,13 @@ import { defineConfig } from 'vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
+    deno(),
     vue(),
     tailwindcss(),
-    deno(),
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      '~': fileURLToPath(new URL('./packages', import.meta.url)),
     },
   },
   server: {

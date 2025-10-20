@@ -8,5 +8,8 @@
   "[vue]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
   },
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "[typescript]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  }
 }

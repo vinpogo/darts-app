@@ -15,69 +15,41 @@ export const newGame = (
     status: GameState.IN_PROGRESS,
   })
 }
-export class InvalidRoundError extends Error {}
-const validateRound = (
+export class InvalidShotsError extends Error {}
+const validateShots = (
   round: Shot[],
   game: Game,
-): Result<Round, InvalidRoundError> => {
+): Result<Round, InvalidShotsError> => {
   if (round.length === 0) {
-    return new NotOk(new InvalidRoundError('Throw at least one dart'))
+    return new NotOk(new InvalidShotsError('Throw at least one dart'))
   }
   if (round.length > 3) {
-    return new NotOk(new InvalidRoundError('Too many darts thrown'))
+    return new NotOk(new InvalidShotsError('Too many darts thrown'))
   }
   const roundScore = round.reduce((sum, { hit }) => sum + fieldToScore(hit), 0)
-  if (roundScore > game.score) return new NotOk(new InvalidRoundError('Bust'))
+  if (roundScore > game.score || game.score - roundScore === 1) {
+    return new NotOk(new InvalidShotsError('Busted'))
+  }
   return new Ok({ score: roundScore, darts: round })
 }
 
 export const addRound = async (
   id: Game['id'],
-  round: Shot[],
-): Promise<Result<Game, InvalidRoundError | KvReadError | KvWriteError>> => {
-  const game = await get<Game>(['game', id])
-  return game.flatMap((value) => {
-    if (value instanceof KvReadError) return new NotOk(value)
-    const foo = validateRound(round, value).flatMap((maybeRound) => {
-      if (maybeRound instanceof InvalidRoundError) {
-        return new NotOk(maybeRound)
-      }
-      return set<Game>(['game', id], {
-        ...value,
-        rounds: [...value.rounds, maybeRound],
-        score: value.score - maybeRound.score,
-      })
-    })
-    return foo
+  shots: Shot[],
+): Promise<Result<Game, InvalidShotsError | KvReadError | KvWriteError>> => {
+  const { value: game } = await get<Game>(['game', id])
+  if (game instanceof KvReadError) return new NotOk(game)
+
+  const { value: round } = validateShots(shots, game)
+  if (round instanceof InvalidShotsError) return new NotOk(round)
+
+  const newScore = game.score - round.score
+  const isFinished = shots.at(-1)!.hit.startsWith('D') && newScore === 0
+
+  return set<Game>(['game', id], {
+    ...game,
+    status: isFinished ? GameState.DONE : game.status,
+    rounds: [...game.rounds, round],
+    score: newScore,
   })
-}
-
-export const addShot = async (
-  id: Game['id'],
-  shot: Shot,
-): Promise<Result<Game, Game | KvReadError | KvWriteError>> => {
-  const maybeGame = await get<Game>(['game', id])
-  const g = maybeGame.flatMap((game) => {
-    if (game instanceof KvReadError) return new NotOk(game)
-    const round = game.rounds[game.currentRound] ?? { score: 0, darts: [] }
-    round.darts.push(shot)
-    round.score += fieldToScore(shot.hit)
-    const newGameScore = game.score - round.score
-    const busted = newGameScore === 1 || newGameScore < 0
-    const gameDone = newGameScore === 0 && shot.hit.startsWith('D')
-    if (busted) {
-      return new NotOk(game)
-    }
-    if (gameDone) {
-      game.status = GameState.DONE
-    }
-
-    game.rounds[game.currentRound] = round
-    game.score = newGameScore
-
-    if (!gameDone && round.darts.length === 3) game.currentRound++
-    return game as unknown as Ok<Game>
-  })
-  if (g instanceof NotOk) return g
-  return set<Game>(['game', id], g.value)
 }
