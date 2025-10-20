@@ -1,6 +1,6 @@
 {
   "deno.enable": true,
-  "deno.disablePaths": ["src"],
+  "deno.disablePaths": ["frontend"],
   "deno.lint": true,
   "deno.suggest.imports.autoDiscover": true,
   "editor.codeActionsOnSave": { "source.organizeImports": "always" },
