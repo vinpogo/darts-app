@@ -14,6 +14,7 @@
     "jsr:@std/testing@^1.0.16": "1.0.16",
     "jsr:@untier/result@~0.2.1": "0.2.1",
     "npm:@deno/vite-plugin@^1.0.5": "1.0.5_vite@7.1.9__picomatch@4.0.3_@types+node@24.2.0",
+    "npm:@hono/zod-validator@~0.7.4": "0.7.4_hono@4.9.12_zod@4.1.12",
     "npm:@primeuix/themes@^1.2.5": "1.2.5",
     "npm:@primevue/themes@^4.4.1": "4.4.1",
     "npm:@tailwindcss/vite@^4.1.14": "4.1.14_vite@7.1.9__picomatch@4.0.3_@types+node@24.2.0",
@@ -31,7 +32,8 @@
     "npm:vite@^7.1.9": "7.1.9_picomatch@4.0.3_@types+node@24.2.0",
     "npm:vue-router@^4.5.1": "4.5.1_vue@3.5.22__typescript@5.9.3_typescript@5.9.3",
     "npm:vue-tsc@^3.1.1": "3.1.1_typescript@5.9.3",
-    "npm:vue@^3.5.22": "3.5.22_typescript@5.9.3"
+    "npm:vue@^3.5.22": "3.5.22_typescript@5.9.3",
+    "npm:zod@^4.1.12": "4.1.12"
   },
   "jsr": {
     "@std/assert@1.0.15": {
@@ -245,6 +247,13 @@
       "integrity": "sha512-9KpxSVFCu0iK1owoez6aC/s/EdUQLDN3adTxGCqxMVhrPDj6bt5dbrHDXUuq+Bs2vATFBBrQS5vdQ/Ed2P+nbw==",
       "os": ["win32"],
       "cpu": ["x64"]
+    },
+    "@hono/zod-validator@0.7.4_hono@4.9.12_zod@4.1.12": {
+      "integrity": "sha512-biKGn3BRJVaftZlIPMyK+HCe/UHAjJ6sH0UyXe3+v0OcgVr9xfImDROTJFLtn9e3XEEAHGZIM9U6evu85abm8Q==",
+      "dependencies": [
+        "hono",
+        "zod"
+      ]
     },
     "@isaacs/fs-minipass@4.0.1": {
       "integrity": "sha512-wgm9Ehl2jpeqP3zw/7mo3kRHFp5MEDhqAdwy1fTGkHAwnkGOVsgpvQhL8B5n1qlb01jV3n/bI0ZfZp5lWA1k4w==",
@@ -1044,6 +1053,9 @@
     },
     "yallist@5.0.0": {
       "integrity": "sha512-YgvUTfwqyc7UXVMrB+SImsVYSmTS8X/tSrtdNZMImM+n7+QTriRXyXim0mBrTXNeqzVF0KWGgHPeiyViFFrNDw=="
+    },
+    "zod@4.1.12": {
+      "integrity": "sha512-JInaHOamG8pt5+Ey8kGmdcAcg3OL9reK8ltczgHTAwNhMys/6ThXHityHxVV2p3fkw/c+MAvBHFVYHFZDmjMCQ=="
     }
   },
   "workspace": {
@@ -1053,6 +1065,7 @@
       "jsr:@std/testing@^1.0.16",
       "jsr:@untier/result@~0.2.1",
       "npm:@deno/vite-plugin@^1.0.5",
+      "npm:@hono/zod-validator@~0.7.4",
       "npm:@primeuix/themes@^1.2.5",
       "npm:@primevue/themes@^4.4.1",
       "npm:@tailwindcss/vite@^4.1.14",
@@ -1068,7 +1081,8 @@
       "npm:vite@^7.1.9",
       "npm:vue-router@^4.5.1",
       "npm:vue-tsc@^3.1.1",
-      "npm:vue@^3.5.22"
+      "npm:vue@^3.5.22",
+      "npm:zod@^4.1.12"
     ]
   }
 }

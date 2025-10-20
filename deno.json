@@ -6,6 +6,7 @@
   },
   "imports": {
     "@deno/vite-plugin": "npm:@deno/vite-plugin@^1.0.5",
+    "@hono/zod-validator": "npm:@hono/zod-validator@^0.7.4",
     "@primeuix/themes": "npm:@primeuix/themes@^1.2.5",
     "@primevue/themes": "npm:@primevue/themes@^4.4.1",
     "@std/expect": "jsr:@std/expect@^1.0.17",
@@ -26,7 +27,8 @@
     "vite": "npm:vite@^7.1.9",
     "vue": "npm:vue@^3.5.22",
     "vue-router": "npm:vue-router@^4.5.1",
-    "vue-tsc": "npm:vue-tsc@^3.1.1"
+    "vue-tsc": "npm:vue-tsc@^3.1.1",
+    "zod": "npm:zod@^4.1.12"
   },
   "nodeModulesDir": "auto",
   "unstable": ["fmt-component", "kv"],
