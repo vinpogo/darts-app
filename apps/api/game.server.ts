@@ -4,7 +4,7 @@ import { HTTPException } from 'hono/http-exception'
 import z from 'zod'
 import { KvReadError, KvWriteError } from '~/data/db.ts'
 import { addRound, InvalidShotsError, newGame } from '~/games/doubleOut.ts'
-import { shotSchema } from '~/games/game.types.ts'
+import { type Game, shotSchema } from '~/games/game.types.ts'
 
 export const GameServer = new Hono()
   .post('/', async (c) => {
@@ -13,7 +13,7 @@ export const GameServer = new Hono()
       throw new HTTPException(500, { message: maybeGame.message })
     }
 
-    return c.json(maybeGame)
+    return c.json<Game>(maybeGame)
   })
   .post(
     '/:id/score',
@@ -30,7 +30,7 @@ export const GameServer = new Hono()
         throw new HTTPException(400, { message: game.message })
       }
 
-      return c.json(game)
+      return c.json<Game>(game)
     },
   )
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Path } from '../../packages/aim/path'
+import { Path } from '../../../packages/aim/path'
 
 const props = defineProps<{
   totalScore: number

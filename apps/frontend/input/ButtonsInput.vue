@@ -42,12 +42,12 @@
 import { useRefHistory } from '@vueuse/core'
 import { Button } from 'primevue'
 import { ref } from 'vue'
-import { Field, Miss } from '../../packages/types/board'
+import { Field, Miss } from '../../../packages/types/board'
 import NumberButton from './NumberButton.vue'
 
 const emit = defineEmits<{
   score: [(Field | Miss)[]]
-  submit: [void]
+  submit: [(Field | Miss)[]]
 }>()
 
 const numbers = ref(Array.from({ length: 20 }, (_, i) => String(i + 1)))
@@ -73,7 +73,7 @@ function onUndo() {
 }
 
 function submit() {
-  emit('submit')
+  emit('submit', scores.value)
   scores.value = []
 }
 </script>

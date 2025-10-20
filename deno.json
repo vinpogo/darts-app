@@ -1,7 +1,7 @@
 {
   "tasks": {
     "dev": "deno task dev:api & deno task dev:fe",
-    "dev:api": "deno run --watch --unstable-no-legacy-abort --allow-read --allow-write --allow-net ./api/main.ts",
+    "dev:api": "deno run --watch --unstable-no-legacy-abort --allow-read --allow-write --allow-net ./apps/api/main.ts",
     "dev:fe": "deno run -A npm:vite"
   },
   "imports": {
