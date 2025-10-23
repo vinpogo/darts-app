@@ -1,5 +1,7 @@
-import { type InferRequestType } from 'hono/client'
-import { gameClient } from '../../api/game.client'
+import { hc, type InferRequestType } from 'hono/client'
+import type { GameServerType } from '../../api/game.server'
+
+export const gameClient = hc<GameServerType>('api/game')
 
 export const startGameApi = async () => {
   const res = await gameClient.index.$post()
