@@ -2,7 +2,7 @@ import { Hono } from 'hono'
 import { logger } from 'hono/logger'
 import { GameServer } from './game.server.ts'
 
-const app = new Hono()
+export const app = new Hono()
   .basePath('/api')
   .use(logger())
   .route('/game', GameServer)

@@ -1,24 +1,35 @@
-import { NotOk, Ok, type Result } from '@untier/result'
+import { Effect } from 'effect'
 
 const db = await Deno.openKv('./db')
 
-export class KvWriteError extends Error {}
-export class KvReadError extends Error {}
+export class KvWriteError extends Error {
+  readonly _tag = 'KvWriteError'
+}
+export class KvReadError extends Error {
+  readonly _tag = 'KvReadError'
+}
 
-export const set = async <T>(
+export const set = <T>(
   key: string[],
   value: T,
-): Promise<Result<T, KvWriteError>> => {
-  console.log('setting', key, value)
-  const res = await db.set(key, value)
-  if (res.ok) return new Ok(value)
-  return new NotOk(new KvWriteError('something went wrong!'))
-}
+): Effect.Effect<T, KvWriteError, never> =>
+  Effect.tryPromise({
+    try: async () => {
+      const res = await db.set(key, value)
+      if (res.ok) return value
+      throw new Error()
+    },
+    catch: () => new KvWriteError(`Failed to write key: ${key}`),
+  })
 
-export const get = async <T>(
+export const get = <T>(
   key: string[],
-): Promise<Result<T, KvReadError>> => {
-  const res = await db.get<T>(key)
-  if (res.value) return new Ok(res.value)
-  return new NotOk(new KvReadError(`No entry with key: ${key}!`))
-}
+) =>
+  Effect.tryPromise({
+    try: async () => {
+      const res = await db.get<T>(key)
+      if (res.value) return res.value
+      throw new Error()
+    },
+    catch: () => new KvReadError(`No entry with key: ${key}`),
+  })

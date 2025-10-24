@@ -1,8 +1,8 @@
-import z from 'zod'
+import { Schema } from 'effect'
 
 export const Miss = 'MISS' as const
-export const missSchema = z.literal(Miss)
-export type Miss = z.infer<typeof missSchema>
+export const missSchema = Schema.Literal(Miss)
+export type Miss = typeof missSchema.Type
 
 export const Field = [
   '1',
@@ -68,8 +68,10 @@ export const Field = [
   'Bull',
   'DBull',
 ] as const
-export const fieldSchema = z.literal(Field)
-export type Field = z.infer<typeof fieldSchema>
+export const fieldSchema = Schema.Literal(...Field)
+export type Field = typeof fieldSchema.Type
+
+export type FieldOrMiss = Field | Miss
 
 export const scoreMap: Record<Field | Miss, number> = {
   1: 1,

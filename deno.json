@@ -15,6 +15,7 @@
     "@vitejs/plugin-vue": "npm:@vitejs/plugin-vue@^6.0.1",
     "@vue/tsconfig": "npm:@vue/tsconfig@^0.8.1",
     "@vueuse/core": "npm:@vueuse/core@^13.9.0",
+    "effect": "npm:effect@^3.18.4",
     "hono": "npm:hono@^4.9.12",
     "ky": "npm:ky@^1.11.0",
     "primeicons": "npm:primeicons@^7.0.0",

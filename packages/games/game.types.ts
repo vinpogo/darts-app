@@ -1,30 +1,31 @@
+import { Schema } from 'effect'
 import { fieldSchema, missSchema } from 'types/board.ts'
-import * as z from 'zod'
-
-export const shotSchema = z.object({
+export const shotSchema = Schema.Struct({
   aim: fieldSchema,
-  hit: z.union([fieldSchema, missSchema]),
+  hit: Schema.Union(fieldSchema, missSchema),
 })
-export type Shot = z.infer<typeof shotSchema>
+export type Shot = typeof shotSchema.Type
+export const shotsSchema = Schema.Array(shotSchema)
+export type Shots = typeof shotsSchema.Type
 
-export const roundSchema = z.object({
-  score: z.number(),
-  darts: shotSchema.array(),
+export const roundSchema = Schema.Struct({
+  score: Schema.Number,
+  darts: Schema.Array(shotSchema),
 })
-export type Round = z.infer<typeof roundSchema>
+export type Round = typeof roundSchema.Type
 
-export const gameStateSchema = z.literal(['IN_PROGRESS', 'DONE'])
-export type GameState = z.infer<typeof gameStateSchema>
+export const gameStateSchema = Schema.Literal('IN_PROGRESS', 'DONE')
+export type GameState = typeof gameStateSchema.Type
 export const GameState: Record<GameState, GameState> = {
   IN_PROGRESS: 'IN_PROGRESS',
   DONE: 'DONE',
 }
 
-export const gameSchema = z.object({
-  id: z.string(),
-  score: z.number(),
-  rounds: roundSchema.array(),
-  currentRound: z.number(),
+export const gameSchema = Schema.Struct({
+  id: Schema.String,
+  score: Schema.Number,
+  rounds: Schema.Array(roundSchema),
+  currentRound: Schema.Number,
   status: gameStateSchema,
 })
-export type Game = z.infer<typeof gameSchema>
+export type Game = typeof gameSchema.Type
